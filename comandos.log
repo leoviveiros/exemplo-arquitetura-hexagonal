@@ -1,0 +1,3 @@
+git init
+
+go mod init go-hexagonal

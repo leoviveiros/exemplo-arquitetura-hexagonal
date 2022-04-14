@@ -1,5 +1,7 @@
 package application
 
+import "errors"
+
 type ProductInterface interface {
 	IsValid() (bool, error)
 	Enable() error
@@ -27,7 +29,12 @@ func (p *Product) IsValid() (bool, error) {
 }
 
 func (p *Product) Enable() error {
-	return nil
+	if p.Price > 0 {
+		p.Status = ENABLED
+		return nil
+	}
+
+	return errors.New("Price must be greater than 0")
 }
 
 func (p *Product) Disable() error {

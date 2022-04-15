@@ -23,3 +23,20 @@ func TestProduct_Enable(t *testing.T) {
 
 	require.NotNil(t, err)
 }
+
+func TesProduct_Disable(t *testing.T) {
+	product := application.Product{}
+	product.Name = "Product 1"
+	product.Status = application.ENABLED
+	product.Price = 0
+
+	err := product.Disable()
+
+	require.Nil(t, err)
+
+	product.Price = 10
+
+	err = product.Disable()
+
+	require.NotNil(t, err)
+}

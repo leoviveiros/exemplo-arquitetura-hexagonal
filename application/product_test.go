@@ -4,6 +4,7 @@ import (
 	"go-hexagonal/application"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 )
 
@@ -39,4 +40,34 @@ func TesProduct_Disable(t *testing.T) {
 	err = product.Disable()
 
 	require.NotNil(t, err)
+}
+
+func TestIsValid(t *testing.T) {
+	product := application.Product{}
+	product.ID = uuid.New().String()
+	product.Name = "Product 1"
+	product.Status = application.DISABLED
+	product.Price = 10
+
+	isValid, err := product.IsValid()
+	require.Nil(t, err)
+	require.True(t, isValid)
+
+	product.Status = "INVALID"
+
+	isValid, err = product.IsValid()
+	require.NotNil(t, err)
+	require.False(t, isValid)
+
+	product.Status = application.ENABLED
+
+	isValid, err = product.IsValid()
+	require.Nil(t, err)
+	require.True(t, isValid)
+
+	product.Price = -10
+
+	isValid, err = product.IsValid()
+	require.NotNil(t, err)
+	require.False(t, isValid)
 }

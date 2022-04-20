@@ -6,3 +6,10 @@ go install github.com/spf13/cobra/cmd/cobra
 go install github.com/golang/mock/mockgen@v1.5.0
 
 mockgen -destination=application/mocks/application.go -source=application/product.go application
+
+choco install sqlite
+
+// somente para testes
+sqlite3 sqlite.db
+    create table products (id string, name string, price float, status string);
+    .tables

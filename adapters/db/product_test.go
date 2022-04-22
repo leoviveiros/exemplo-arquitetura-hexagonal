@@ -3,6 +3,7 @@ package db_test
 import (
 	"database/sql"
 	"go-hexagonal/adapters/db"
+	"go-hexagonal/application"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -53,4 +54,31 @@ func TestProductDB_Get(t *testing.T) {
 	require.Equal(t, "Product 1", product.GetName())
 	require.Equal(t, 10.0, product.GetPrice())
 	require.Equal(t, "disabled", product.GetStatus())
+}
+
+func TestProductDB_Save(t *testing.T) {
+	setup()
+	defer DB.Close()
+
+	productDB := db.NewProductDB(DB)
+
+	product := application.NewProduct()
+	product.Name = "Product 2"
+	product.Price = 20.0
+
+	productResult, err := productDB.Save(product)
+
+	require.Nil(t, err)
+	require.Equal(t, "Product 2", productResult.GetName())
+	require.Equal(t, 20.0, productResult.GetPrice())
+	require.Equal(t, "disabled", productResult.GetStatus())
+
+	product.Status = "enabled"
+
+	productResult, err = productDB.Save(product)
+
+	require.Nil(t, err)
+	require.Equal(t, "Product 2", productResult.GetName())
+	require.Equal(t, 20.0, productResult.GetPrice())
+	require.Equal(t, "enabled", productResult.GetStatus())
 }

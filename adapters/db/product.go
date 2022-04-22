@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"go-hexagonal/application"
+	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -36,24 +37,28 @@ func (p *ProductDB) Get(id string) (application.ProductInterface, error) {
 
 func (p *ProductDB) Save(product application.ProductInterface) (application.ProductInterface, error) {
 	var rows int
+	var result application.ProductInterface
+	var err error
 
-	p.db.QueryRow("SELECT id FROM products WHERE id = ?", product.GetID()).Scan(&rows)
+	p.db.QueryRow("SELECT COUNT(id) FROM products WHERE id = ?", product.GetID()).Scan(&rows)
+
+	log.Println("rows: ", rows)
 
 	if rows == 0 {
-		_, err := p.create(product)
+		result, err = p.create(product)
 
 		if err != nil {
 			return nil, err
 		}
 	} else {
-		_, err := p.update(product)
+		result, err = p.update(product)
 
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	return product, nil
+	return result, nil
 }
 
 func (p *ProductDB) create(product application.ProductInterface) (application.ProductInterface, error) {

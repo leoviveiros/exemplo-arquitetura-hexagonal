@@ -13,3 +13,4 @@ choco install sqlite
 sqlite3 sqlite.db
     create table products (id string, name string, price float, status string);
     .tables
+    select * from products;

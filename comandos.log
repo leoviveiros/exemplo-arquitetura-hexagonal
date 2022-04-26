@@ -2,7 +2,7 @@ git init
 
 go mod init go-hexagonal
 
-go install github.com/spf13/cobra/cmd/cobra
+go install github.com/spf13/cobra-cli@v1.3.0
 go install github.com/golang/mock/mockgen@v1.5.0
 
 mockgen -destination=application/mocks/application.go -source=application/product.go application
@@ -15,3 +15,13 @@ sqlite3 sqlite.db
     .tables
     select * from products;
     delete from products;
+
+
+// cobra-cli
+cobra-cli init
+cobra-cli add cli
+
+// CLI
+
+go run main.go cli --action create --name "Product CLI" --price 1.99
+go run main.go cli --action get --id 0e1ebfa1-129b-40df-a274-1615694d80fb

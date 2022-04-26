@@ -16,7 +16,7 @@ func Run(service application.ProductServiceInterface, action string, productId s
 				return result, err
 			}
 
-			result = fmt.Sprintf("Product %s created with status %s", product.GetName(), product.GetStatus())
+			result = fmt.Sprintf("Product %s created with ID %s, status %s and price %f", product.GetName(), product.GetID(), product.GetStatus(), product.GetPrice())
 		}
 
 		case "enable": {

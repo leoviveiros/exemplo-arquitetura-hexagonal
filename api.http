@@ -1,0 +1,4 @@
+GET http://localhost:8080/product/0e1ebfa1-129b-40df-a274-1615694d80fb
+
+###
+GET http://localhost:8080/product/dcf8e117-c834-4a50-9413-33cd339b1daf

@@ -22,6 +22,10 @@ cobra-cli init
 cobra-cli add cli
 
 // CLI
-
 go run main.go cli --action create --name "Product CLI" --price 1.99
 go run main.go cli --action get --id 0e1ebfa1-129b-40df-a274-1615694d80fb
+
+// WEB
+cobra-cli add http
+
+go run main.go http

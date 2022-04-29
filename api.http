@@ -3,7 +3,7 @@ GET http://localhost:8080/product/0e1ebfa1-129b-40df-a274-1615694d80fb
 ###
 GET http://localhost:8080/product/dcf8e117-c834-4a50-9413-33cd339b1daf
 
-###
+### Create product
 POST http://localhost:8080/product
 Content-Type: application/json
 
@@ -12,7 +12,7 @@ Content-Type: application/json
   "price": 100.0
 }
 
-###
+### Create product wiht error
 POST http://localhost:8080/product
 Content-Type: application/json
 
@@ -20,3 +20,11 @@ Content-Type: application/json
   "name": "Product Error",
   "price": -10.0
 }
+
+### Enable product
+PUT http://localhost:8080/product/dcf8e117-c834-4a50-9413-33cd339b1daf/enable
+Content-Type: application/json
+
+### Disable product
+PUT http://localhost:8080/product/dcf8e117-c834-4a50-9413-33cd339b1daf/disable
+Content-Type: application/json

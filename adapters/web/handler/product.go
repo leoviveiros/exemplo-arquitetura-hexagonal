@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"go-hexagonal/adapters/dto"
 	"go-hexagonal/application"
 	"net/http"
 
@@ -13,6 +14,10 @@ func NewProductHandler(router *mux.Router, middleware *negroni.Negroni, service 
 	router.Handle("/product/{id}", middleware.With(
 		negroni.Wrap(getProduct(service)),
 	)).Methods("GET", "OPTIONS")
+
+	router.Handle("/product", middleware.With(
+		negroni.Wrap(createProduct(service)),
+	)).Methods("POST", "OPTIONS")
 }
 
 func getProduct(service application.ProductServiceInterface) http.Handler {
@@ -33,6 +38,38 @@ func getProduct(service application.ProductServiceInterface) http.Handler {
 
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+	})
+}
+
+func createProduct(service application.ProductServiceInterface) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+
+		var productDTO dto.Product
+
+		err := json.NewDecoder(r.Body).Decode(&productDTO)
+
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write(jsonError(err.Error()))
+			return
+		}
+
+		product, err := service.Create(productDTO.Name, productDTO.Price)
+
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write(jsonError(err.Error()))
+			return
+		}
+
+		err = json.NewEncoder(w).Encode(product)
+
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write(jsonError(err.Error()))
 			return
 		}
 	})
